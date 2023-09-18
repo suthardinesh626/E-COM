@@ -1,11 +1,17 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { decrement, incrementAsync, selectCount } from "./components/Login";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchCount } from "./authAPI";
 
-export default function authSlice() {
-  const count = useSelector(selectCount);
-  const dispatch = useDispatch();
-
-  return <>
-  </>;
+const initialState = {
+  value: 0,
+  status: 'idle',
 }
+
+export const incrementAsync = createAsyncThunk(
+  'counter/fetchCount',
+  async (amount) => {
+    const response = await fetchCount(amount);
+    return response.data;
+  }
+);
+
+export const selectCount = (state) => state.counter.value;
