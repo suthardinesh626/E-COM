@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  decrement,
-  incrementAsync,
-  selectCount,
-} from './counterSlice';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { increment, incrementAsync, selectCount } from "../authSlice";
 
 export default function Login() {
   const count = useSelector(selectCount);
@@ -12,7 +8,7 @@ export default function Login() {
 
   return (
     <>
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
@@ -83,6 +79,7 @@ export default function Login() {
           </p>
         </div>
       </div>
+
     </>
   );
 }
