@@ -651,23 +651,12 @@ const filters = [
     id: "category",
     name: "Category",
     options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
-    ],
-  },
-  {
-    id: "size",
-    name: "Size",
-    options: [
-      { value: "2l", label: "2L", checked: false },
-      { value: "6l", label: "6L", checked: false },
-      { value: "12l", label: "12L", checked: false },
-      { value: "18l", label: "18L", checked: false },
-      { value: "20l", label: "20L", checked: false },
-      { value: "40l", label: "40L", checked: true },
+      { value: "smartphone", label: "Smartphone", checked: false },
+      { value: "laptops", label: "Laptops", checked: false },
+      { value: "fragrances", label: "Fragrances", checked: false },
+      { value: "skincare", label: "Skincare", checked: false },
+      { value: "groceries", label: "Groceries", checked: false },
+      { value: "home-decoration", label: "Home Decoration", checked: false },
     ],
   },
 ];
@@ -681,9 +670,9 @@ export default function ProductList() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const products = useSelector(selectAllPrducts);
 
-  useEffect(()=>{
-    dispatch(fetchAllProductsAsync())
-  },[dispatch])
+  useEffect(() => {
+    dispatch(fetchAllProductsAsync());
+  }, [dispatch]);
 
   return (
     <>
@@ -917,6 +906,9 @@ export default function ProductList() {
                                     defaultValue={option.value}
                                     type="checkbox"
                                     defaultChecked={option.checked}
+                                    onChange={ e=> handleFilter(e, section, option )
+                                      
+                                    }
                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                   />
                                   <label
