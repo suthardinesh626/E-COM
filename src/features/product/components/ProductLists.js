@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { decrement, incrementAsync, selectCount } from "../ProductListSlice";
+import { fetchAllProductsAsync, selectAllPrducts } from "../ProductListSlice";
 import { Fragment } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -677,10 +677,13 @@ function classNames(...classes) {
 }
 
 export default function ProductList() {
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
-  const count = useSelector(selectCount);
   const dispatch = useDispatch();
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const products = useSelector(selectAllPrducts);
+
+  useEffect(()=>{
+    dispatch(fetchAllProductsAsync())
+  },[dispatch])
 
   return (
     <>
@@ -939,7 +942,10 @@ export default function ProductList() {
                       <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                         {products.map((product) => (
                           <Link to="/product-detail">
-                            <div key={product.id} className="group relative border-solid border-2 p-4">
+                            <div
+                              key={product.id}
+                              className="group relative border-solid border-2 p-4"
+                            >
                               <div className=" overflow-hidden rounded-md relative bg-gray-200 group-hover:opacity-75 ">
                                 <img
                                   src={product.thumbnail}
