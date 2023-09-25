@@ -1,12 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllProductsAsync, selectAllPrducts } from "../ProductListSlice";
+import {
+  fetchAllProductsAsync,
+  fetchAllProductsByFiltersAsync,
+  selectAllPrducts,
+} from "../ProductListSlice";
 import { Fragment } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, } from "@heroicons/react/20/solid";
-import { ChevronLeftIcon, ChevronRightIcon, StarIcon, } from "@heroicons/react/20/solid";
+import {
+  ChevronDownIcon,
+  FunnelIcon,
+  MinusIcon,
+  PlusIcon,
+  Squares2X2Icon,
+} from "@heroicons/react/20/solid";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  StarIcon,
+} from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
+import { fetchAllProductsByFilters } from "../productAPI";
 
 const items = [
   {
@@ -611,11 +626,9 @@ const products = [
 ];
 
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
-  { name: "Best Rating", href: "#", current: false },
-  { name: "Newest", href: "#", current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  { name: "Best Rating", sort: "rating", order: "desc", current: false },
+  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
+  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
 ];
 const subCategories = [
   { name: "Totes", href: "#" },
@@ -659,9 +672,19 @@ export default function ProductList() {
   const dispatch = useDispatch();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const products = useSelector(selectAllPrducts);
+  const [filter, setFilter] = useState({});
 
   const handleFilter = (e, section, option) => {
+    const newFilter = { ...filter, [section.id]: option.value };
+    setFilter(newFilter);
+    dispatch(fetchAllProductsByFiltersAsync(newFilter));
     console.log(section.id, option.value);
+  };
+
+  const handleSort = (e, option) => {
+    const newFilter = { ...filter, _sort: option.sort, _order: option.order };
+    setFilter(newFilter);
+    dispatch(fetchAllProductsByFiltersAsync(newFilter));
   };
 
   useEffect(() => {
@@ -759,7 +782,6 @@ export default function ProductList() {
                                         defaultValue={option.value}
                                         type="checkbox"
                                         defaultChecked={option.checked}
-
                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                       />
                                       <label
@@ -814,8 +836,8 @@ export default function ProductList() {
                         {sortOptions.map((option) => (
                           <Menu.Item key={option.name}>
                             {({ active }) => (
-                              <a
-                                href={option.href}
+                              <p
+                              onClick={(e) => handleSort(e, option)}
                                 className={classNames(
                                   option.current
                                     ? "font-medium text-gray-900"
@@ -825,7 +847,7 @@ export default function ProductList() {
                                 )}
                               >
                                 {option.name}
-                              </a>
+                              </p>
                             )}
                           </Menu.Item>
                         ))}
@@ -888,7 +910,7 @@ export default function ProductList() {
                               </span>
                             </Disclosure.Button>
                           </h3>
-                        
+
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-4">
                               {section.options.map((option, optionIdx) => (
@@ -896,17 +918,20 @@ export default function ProductList() {
                                   key={option.value}
                                   className="flex items-center"
                                 >
-                                    <input
-                                      id={`filter-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
-                                      defaultValue={option.value}
-                                      type="checkbox"
-                                      defaultChecked={option.checked}
-                                      onChange={e => handleFilter(e, section, option)
-                                      }
-                                      onClick={() => {console.log("butonclicker")}}
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
+                                  <input
+                                    id={`filter-${section.id}-${optionIdx}`}
+                                    name={`${section.id}[]`}
+                                    defaultValue={option.value}
+                                    type="checkbox"
+                                    defaultChecked={option.checked}
+                                    onChange={(e) =>
+                                      handleFilter(e, section, option)
+                                    }
+                                    onClick={() => {
+                                      console.log("butonclicker");
+                                    }}
+                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  />
                                   <label
                                     htmlFor={`filter-${section.id}-${optionIdx}`}
                                     className="ml-3 text-sm text-gray-600"
@@ -944,13 +969,13 @@ export default function ProductList() {
                               <div className="mt-4 flex justify-between">
                                 <div>
                                   <h3 className="text-sm text-gray-700">
-                                    <a href={product.thumbnail}>
+                                    <div href={product.thumbnail}>
                                       <span
                                         aria-hidden="true"
                                         className="absolute inset-0"
                                       />
                                       {product.title}
-                                    </a>
+                                    </div>
                                   </h3>
                                   <p className="mt-1 text-sm text-gray-500">
                                     <StarIcon className="w-5 h-5 inline" />
@@ -1052,3 +1077,4 @@ export default function ProductList() {
     </>
   );
 }
+
