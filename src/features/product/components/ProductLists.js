@@ -4,18 +4,8 @@ import { fetchAllProductsAsync, selectAllPrducts } from "../ProductListSlice";
 import { Fragment } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/20/solid";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  StarIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon, } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon, } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 
 const items = [
@@ -670,6 +660,10 @@ export default function ProductList() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const products = useSelector(selectAllPrducts);
 
+  const handleFilter = (e, section, option) => {
+    console.log(section.id, option.value);
+  };
+
   useEffect(() => {
     dispatch(fetchAllProductsAsync());
   }, [dispatch]);
@@ -765,6 +759,7 @@ export default function ProductList() {
                                         defaultValue={option.value}
                                         type="checkbox"
                                         defaultChecked={option.checked}
+
                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                       />
                                       <label
@@ -893,6 +888,7 @@ export default function ProductList() {
                               </span>
                             </Disclosure.Button>
                           </h3>
+                        
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-4">
                               {section.options.map((option, optionIdx) => (
@@ -900,17 +896,17 @@ export default function ProductList() {
                                   key={option.value}
                                   className="flex items-center"
                                 >
-                                  <input
-                                    id={`filter-${section.id}-${optionIdx}`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    defaultChecked={option.checked}
-                                    onChange={ e=> handleFilter(e, section, option )
-                                      
-                                    }
-                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                  />
+                                    <input
+                                      id={`filter-${section.id}-${optionIdx}`}
+                                      name={`${section.id}[]`}
+                                      defaultValue={option.value}
+                                      type="checkbox"
+                                      defaultChecked={option.checked}
+                                      onChange={e => handleFilter(e, section, option)
+                                      }
+                                      onClick={() => {console.log("butonclicker")}}
+                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    />
                                   <label
                                     htmlFor={`filter-${section.id}-${optionIdx}`}
                                     className="ml-3 text-sm text-gray-600"
