@@ -1078,3 +1078,16 @@ export default function ProductList() {
   );
 }
 
+
+function MobileFilters(){
+  return 
+}
+function DekstopFilters(){
+  return 
+}
+function Pagination(){
+  return 
+}
+function ProductGrid(){
+  return 
+}
