@@ -22,6 +22,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { fetchAllProductsByFilters } from "../productAPI";
+import {ITEM_PER_PAGE} from '../../../app/constants'
 
 const items = [
   {
@@ -673,15 +674,34 @@ export default function ProductList() {
   const products = useSelector(selectAllPrducts);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [filter, setFilter] = useState({});
-  const handleSort = (e, option) => {
-    const newFilter = { ...filters, _sort: option.sort, _order: option.order };
+  const [sort, setSort] = useState({});
+  const [page, setPage]  = useState(1)
+
+  const handleFilter = (e, section, option) => {
+    console.log(e.target.value);
+    const newFilter = { ...filter };
+    if (e.target.checked) {
+      if (newFilter[section.id]) {
+        newFilter[section.id].push(option.value);
+      } else {
+        newFilter[section.id] = [option.value]
+      }
+    } else {
+      const  index = newFilter[section.id].findIndex(el=>el===option.value)
+      newFilter[section.id].splice(index, 1)
+    }
     setFilter(newFilter);
-    dispatch(fetchAllProductsByFiltersAsync(newFilter));
+    console.log(section.id, option.value);
+  };
+
+  const handleSort = (e, option) => {
+    const sort = { _sort: option.sort, _order: option.order };
+    setSort(sort);
   };
 
   useEffect(() => {
-    dispatch(fetchAllProductsAsync());
-  }, [dispatch]);
+    dispatch(fetchAllProductsAsync({ filter, sort }));
+  }, [dispatch, filter]);
 
   return (
     <>
