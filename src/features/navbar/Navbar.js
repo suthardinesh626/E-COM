@@ -52,7 +52,7 @@ function Navbar({ children }) {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation &&
-                          navigation.map((item) => (
+                          navigation?.map((item) => (
                             <a
                               key={item.name}
                               href={item.href}
@@ -111,7 +111,7 @@ function Navbar({ children }) {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
+                            {userNavigation?.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
                                   <a
@@ -154,7 +154,7 @@ function Navbar({ children }) {
 
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                  {navigation.map((item) => (
+                  {navigation?.map((item) => (
                     <Disclosure.Button
                       key={item.name}
                       as="a"
@@ -208,7 +208,7 @@ function Navbar({ children }) {
                     </span>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
-                    {userNavigation.map((item) => (
+                    {userNavigation?.map((item) => (
                       <Disclosure.Button
                         key={item.name}
                         as="a"
